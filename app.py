@@ -5,13 +5,9 @@ import os
 
 st.set_page_config(layout="wide")
 
-# =========================================
-# STYLE SIDEBAR PREMIUM - FINAL ADAPTIF
-# =========================================
 st.markdown("""
 <style>
 
-/* ===== TEMPLATE SIDEBAR UTAMA ===== */
 [data-testid="stSidebar"] {
     background-color: #6e1d3a;
     transition: all 0.3s ease;
@@ -153,19 +149,149 @@ st.markdown("""
 # =========================================
 @st.cache_data
 def load_data():
-    # Menemukan direktori tempat file app.py ini berada secara absolut
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Menggabungkan jalur folder data secara aman untuk lingkungan Linux server
     path_konten = os.path.join(current_dir, "data", "hasil_analisis_konten.csv")
     path_agregat = os.path.join(current_dir, "data", "hasil_clustering_agregat_1tahun.csv")
 
-    # Membaca data menggunakan jalur absolut dinamis
     df_konten = pd.read_csv(path_konten)
     df_agregat = pd.read_csv(path_agregat)
     return df_konten, df_agregat
 
-df_konten, df_agregat = load_data()
+
+def prepare_agregat_data(df):
+    df = df.copy()
+
+    # Rapikan nama kolom dari TikTok Studio
+    df.columns = (
+        df.columns
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "_")
+        .str.replace("-", "_")
+    )
+
+    # Mapping kolom fleksibel
+    rename_map = {
+        "date": "date",
+        "tanggal": "date",
+
+        "video_views": "video_views",
+        "video_view": "video_views",
+        "video_vie": "video_views",
+        "views": "video_views",
+        "tayangan": "video_views",
+
+        "profile_views": "profile_views",
+        "profile_view": "profile_views",
+        "profile_vie": "profile_views",
+
+        "likes": "likes",
+        "like": "likes",
+        "suka": "likes",
+
+        "comments": "comments",
+        "comment": "comments",
+        "komentar": "comments",
+
+        "shares": "shares",
+        "share": "shares",
+        "dibagikan": "shares",
+    }
+
+    df = df.rename(columns={col: rename_map[col] for col in df.columns if col in rename_map})
+
+    required_cols = ["date", "video_views"]
+    missing_cols = [col for col in required_cols if col not in df.columns]
+
+    if missing_cols:
+        raise ValueError(
+            f"Kolom wajib tidak ditemukan: {missing_cols}. "
+            f"Kolom terbaca: {list(df.columns)}"
+        )
+
+    # Konversi format tanggal Indonesia dari TikTok Studio
+    bulan_map = {
+        "januari": "January",
+        "februari": "February",
+        "maret": "March",
+        "april": "April",
+        "mei": "May",
+        "juni": "June",
+        "juli": "July",
+        "agustus": "August",
+        "september": "September",
+        "oktober": "October",
+        "november": "November",
+        "desember": "December",
+    }
+
+    def convert_indonesia_date(x):
+        x = str(x).strip().lower()
+
+        for indo, eng in bulan_map.items():
+            x = x.replace(indo, eng)
+
+        # jika format hanya "1 June", tambahkan tahun default
+        if not any(char.isdigit() and len(x.split()) >= 3 for char in x):
+            pass
+
+        if len(x.split()) == 2:
+            x = f"{x} 2026"
+
+        return x
+
+    df["date"] = df["date"].apply(convert_indonesia_date)
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+    # Bersihkan angka
+    numeric_cols = ["video_views", "profile_views", "likes", "comments", "shares"]
+
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = (
+                df[col]
+                .astype(str)
+                .str.replace(",", "", regex=False)
+                .str.replace(".", "", regex=False)
+                .str.strip()
+            )
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    df = df.dropna(subset=["date"])
+
+    if df.empty:
+        raise ValueError("Data kosong setelah konversi tanggal. Periksa format kolom Date.")
+
+    # Hitung metrik tambahan
+    if "likes" in df.columns and "comments" in df.columns and "shares" in df.columns:
+        df["engagement_total"] = df["likes"] + df["comments"] + df["shares"]
+    else:
+        df["engagement_total"] = 0
+
+    df["engagement_rate"] = (
+        df["engagement_total"] / df["video_views"].replace(0, pd.NA)
+    ) * 100
+
+    df["engagement_rate"] = df["engagement_rate"].fillna(0).round(2)
+
+    df["day_name"] = df["date"].dt.day_name()
+    df["month"] = df["date"].dt.month_name()
+
+    return df
+
+
+df_konten, df_agregat_default = load_data()
+df_agregat_default = prepare_agregat_data(df_agregat_default)
+
+if "df_agregat_active" not in st.session_state:
+    st.session_state.df_agregat_active = df_agregat_default
+
+if "nama_file_agregat" not in st.session_state:
+    st.session_state.nama_file_agregat = "Dataset default"
+
+df_agregat = st.session_state.df_agregat_active
 
 # =========================================
 # HEADER FUNCTION (TAMBAHKAN DI SINI)
@@ -251,18 +377,51 @@ menu = st.session_state.page
 # =========================================
 # ================= DASHBOARD =================
 # =========================================
-df_agregat['date'] = pd.to_datetime(df_agregat['date'], errors='coerce')
-
-df_agregat['day_name'] = df_agregat['date'].dt.day_name()
-df_agregat['month'] = df_agregat['date'].dt.month_name()
-
-
 if menu == "dashboard":
     render_header(
         "Dashboard Analisis TikTok Radar Sukabumi",
         "Ringkasan performa konten dan insight utama"
     )
+    
+    st.markdown("### 📤 Upload Data Agregat Baru")
 
+    with st.expander("Upload CSV Data Agregat TikTok Studio", expanded=False):
+        st.info(
+            "Upload file CSV data agregat baru. Minimal harus memiliki kolom Date, Video views, Likes, Comments, dan Shares, sistem akan menghitung engagement secara otomatis."
+        )
+
+        uploaded_agregat = st.file_uploader(
+            "Pilih file CSV data agregat",
+            type=["csv"],
+            key="upload_agregat"
+        )
+
+        col_upload1, col_upload2 = st.columns([1, 1])
+
+        with col_upload1:
+            if uploaded_agregat is not None:
+                try:
+                    uploaded_df = pd.read_csv(uploaded_agregat)
+                    uploaded_df = prepare_agregat_data(uploaded_df)
+
+                    st.session_state.df_agregat_active = uploaded_df
+                    st.session_state.nama_file_agregat = uploaded_agregat.name
+
+                    st.success(f"Data berhasil diunggah: {uploaded_agregat.name}")
+                    st.rerun()
+
+                except Exception as e:
+                    st.error(f"Upload gagal. Periksa format kolom CSV. Detail error: {e}")
+
+        with col_upload2:
+            if st.button("Gunakan Dataset Default"):
+                st.session_state.df_agregat_active = df_agregat_default
+                st.session_state.nama_file_agregat = "Dataset default"
+                st.rerun()
+
+    df_agregat = st.session_state.df_agregat_active
+
+    st.caption(f"Dataset agregat aktif: {st.session_state.nama_file_agregat}")
     # ================= KPI =================
 
     # ================= KPI ADAPTIF FINAL =================
@@ -285,15 +444,15 @@ if menu == "dashboard":
 
     col3.markdown(f"""
     <div class="kpi-card">
-        <b>Total Konten</b><br>
-        <span style="font-size: 22px; font-weight: 700;">{len(df_konten)}</span>
+        <b>Total Hari Data</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{len(df_agregat)}</span>
     </div>
     """, unsafe_allow_html=True)
 
     col4.markdown(f"""
     <div class="kpi-card">
-        <b>Best Engagement</b><br>
-        <span style="font-size: 22px; font-weight: 700;">{df_konten["engagement_rate"].max():.2f}%</span>
+        <b>Total Konten</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{len(df_konten)}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -345,15 +504,38 @@ elif menu == "agregat":
         "Data Agregat 1 Tahun",
         "Analisis tren performa berdasarkan waktu"
     )
-
+    df_agregat = st.session_state.df_agregat_active
+    st.caption(f"Dataset agregat aktif: {st.session_state.nama_file_agregat}")
     # ================= KPI MINI =================
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric("Total Views", f"{df_agregat['video_views'].sum():,.0f}")
-    col2.metric("Avg Engagement", f"{df_agregat['engagement_rate'].mean():.2f}%")
-    col3.metric("Total Hari Data", len(df_agregat))
+    col1.markdown(f"""
+    <div class="kpi-card">
+        <b>Total Profile Views</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{df_agregat["profile_views"].sum():,.0f}</span>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    col2.markdown(f"""
+    <div class="kpi-card">
+        <b>Total Likes</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{df_agregat["likes"].sum():,.0f}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col3.markdown(f"""
+    <div class="kpi-card">
+        <b>Total Comments</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{df_agregat["comments"].sum():,.0f}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col4.markdown(f"""
+    <div class="kpi-card">
+        <b>Total Shares</b><br>
+        <span style="font-size: 22px; font-weight: 700;">{df_agregat["shares"].sum():,.0f}</span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # ================= ROW 1 =================
     col1, col2 = st.columns(2)
