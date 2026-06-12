@@ -8,6 +8,150 @@ st.set_page_config(layout="wide")
 st.markdown("""
 <style>
 
+/* ==========================
+   SIDEBAR DATASET MANAGER
+========================== */
+
+[data-testid="stSidebar"] .dataset-title,
+[data-testid="stSidebar"] .dataset-label,
+[data-testid="stSidebar"] .dataset-info,
+[data-testid="stSidebar"] .dataset-status {
+    color: rgba(255,255,255,0.90) !important;
+}
+
+[data-testid="stSidebar"] .dataset-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+[data-testid="stSidebar"] .dataset-status {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+[data-testid="stSidebar"] .stExpander {
+    border-radius: 10px;
+}
+
+[data-testid="stSidebar"] .stExpander details summary p {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* tulisan upload file */
+[data-testid="stSidebar"] .stFileUploader label,
+[data-testid="stSidebar"] .stFileUploader small,
+[data-testid="stSidebar"] .stFileUploader span {
+    color: white !important;
+}
+
+/* ================================
+   KELOLA DATASET SIDEBAR
+================================ */
+
+/* Expander wrapper */
+[data-testid="stSidebar"] details {
+    border: 1.5px solid rgba(255,255,255,0.75) !important;
+    border-radius: 10px !important;
+    background-color: rgba(255,255,255,0.03) !important;
+}
+
+/* Header expander saat terbuka/tertutup */
+[data-testid="stSidebar"] details summary,
+[data-testid="stSidebar"] details summary *,
+[data-testid="stSidebar"] details[open] summary,
+[data-testid="stSidebar"] details[open] summary * {
+    color: #111827 !important;
+    font-weight: 800 !important;
+}
+
+/* Garis pemisah antar dataset */
+[data-testid="stSidebar"] hr {
+    border: none !important;
+    height: 1.5px !important;
+    background-color: rgba(255,255,255,0.75) !important;
+    margin: 28px 0 !important;
+}
+
+/* Tombol reset agar terlihat seperti tombol */
+[data-testid="stSidebar"] .reset-dataset-btn button {
+    width: 100% !important;
+    background-color: transparent !important;
+    border: 1.5px solid rgba(255,255,255,0.85) !important;
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 10px 12px !important;
+    margin-top: 8px !important;
+    text-align: center !important;
+}
+
+[data-testid="stSidebar"] .reset-dataset-btn button:hover {
+    background-color: #ffffff !important;
+    color: #6e1d3a !important;
+    border-color: #ffffff !important;
+}
+
+/* Label dan keterangan dataset */
+.dataset-label {
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    margin-top: 10px !important;
+}
+
+.dataset-note {
+    color: rgba(255,255,255,0.88) !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    margin: 5px 0 10px 0 !important;
+}
+
+.dataset-status {
+    color: rgba(255,255,255,0.90) !important;
+    font-size: 11.5px !important;
+    margin-top: 4px !important;
+}
+
+/* ========================
+   FILE UPLOADER SIDEBAR
+=========================== */
+
+[data-testid="stSidebar"] [data-testid="stFileUploader"] {
+    color: white !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stFileUploader"] * {
+    color: white !important;
+}
+
+/* area kotak upload */
+[data-testid="stSidebar"] section[data-testid="stFileUploaderDropzone"] {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+/* tulisan drag file */
+[data-testid="stSidebar"] section[data-testid="stFileUploaderDropzone"] span {
+    color: white !important;
+}
+
+/* ukuran file */
+[data-testid="stSidebar"] section[data-testid="stFileUploaderDropzone"] small {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+/* tombol upload */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button {
+    color: white !important;
+}
+
+/* nama file setelah upload */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] p {
+    color: white !important;
+}
+
 [data-testid="stSidebar"] {
     background-color: #6e1d3a;
     transition: all 0.3s ease;
@@ -108,7 +252,7 @@ st.markdown("""
     margin-bottom: 15px;
 }
 
-/* CONTAINER BERGARIS ADAPTIF 100% */
+/* CONTAINER BERGARIS */
 .outline-box {
     border: 1px solid rgba(128, 128, 128, 0.2);
     border-radius: 14px;
@@ -141,6 +285,69 @@ st.markdown("""
 .header-sub { font-size: 14px; opacity: 0.9; }
 .section { font-size: 22px; font-weight: 700; margin-top: 20px; color: #800000; }
 
+/* =================================
+   FORCE BUTTON FILE UPLOADER
+================================= */
+
+/* Tombol Upload */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button,
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button *,
+[data-testid="stSidebar"] .stFileUploader button,
+[data-testid="stSidebar"] .stFileUploader button * {
+    color: #222222 !important;
+    fill: #222222 !important;
+    font-weight: 600 !important;
+}
+
+/* Icon upload */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] svg {
+    fill: #222222 !important;
+}
+
+/* Saat hover */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button:hover {
+    color: #222222 !important;
+}
+
+/* Saat focus */
+[data-testid="stSidebar"] [data-testid="stFileUploader"] button:focus {
+    color: #222222 !important;
+}    
+
+/* FIX WARNA EXPANDER DATASET */
+[data-testid="stSidebar"] details summary,
+[data-testid="stSidebar"] details summary *,
+[data-testid="stSidebar"] .stExpander summary,
+[data-testid="stSidebar"] .stExpander summary * {
+    color: #222222 !important;
+    font-weight: 700 !important;
+}
+
+/* TOMBOL RESET DATASET */
+[data-testid="stSidebar"] .reset-dataset-btn button {
+    background-color: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.35) !important;
+    border-radius: 10px !important;
+    color: white !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 10px 12px !important;
+    margin-top: 8px !important;
+}
+
+[data-testid="stSidebar"] .reset-dataset-btn button:hover {
+    background-color: white !important;
+    color: #6e1d3a !important;
+}
+
+/* KETERANGAN DATASET */
+.dataset-note {
+    color: rgba(255,255,255,0.78) !important;
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+    margin: 4px 0 8px 0 !important;
+}
+            
 </style>
 """, unsafe_allow_html=True)
 
@@ -281,6 +488,81 @@ def prepare_agregat_data(df):
 
     return df
 
+def prepare_konten_data(df):
+
+    df = df.copy()
+
+    df.columns = (
+        df.columns
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "_")
+        .str.replace("-", "_")
+    )
+
+    required_cols = [
+        "content_type",
+        "upload_date",
+        "upload_time",
+        "video_views",
+        "likes",
+        "comments",
+        "shares"
+    ]
+
+    missing = [c for c in required_cols if c not in df.columns]
+
+    if missing:
+        raise ValueError(
+            f"Kolom wajib tidak ditemukan: {missing}"
+        )
+
+    numeric_cols = [
+        "video_views",
+        "likes",
+        "comments",
+        "shares"
+    ]
+
+    for col in numeric_cols:
+        df[col] = pd.to_numeric(
+            df[col],
+            errors="coerce"
+        ).fillna(0)
+
+    df["engagement_total"] = (
+        df["likes"] +
+        df["comments"] +
+        df["shares"]
+    )
+
+    df["engagement_rate"] = (
+        df["engagement_total"] /
+        df["video_views"].replace(0, pd.NA)
+    ) * 100
+
+    df["engagement_rate"] = (
+        df["engagement_rate"]
+        .fillna(0)
+        .round(2)
+    )
+
+    df["upload_datetime"] = pd.to_datetime(
+        df["upload_date"].astype(str)
+        + " " +
+        df["upload_time"].astype(str),
+        errors="coerce"
+    )
+
+    df["upload_hour"] = df["upload_datetime"].dt.hour
+
+    df["day_name"] = (
+        df["upload_datetime"]
+        .dt.day_name()
+    )
+
+    return df
 
 df_konten, df_agregat_default = load_data()
 df_agregat_default = prepare_agregat_data(df_agregat_default)
@@ -293,9 +575,19 @@ if "nama_file_agregat" not in st.session_state:
 
 df_agregat = st.session_state.df_agregat_active
 
-# =========================================
-# HEADER FUNCTION (TAMBAHKAN DI SINI)
-# =========================================
+df_konten_default = prepare_konten_data(df_konten)
+
+if "df_konten_active" not in st.session_state:
+    st.session_state.df_konten_active = df_konten_default
+
+if "nama_file_konten" not in st.session_state:
+    st.session_state.nama_file_konten = "Dataset default"
+
+df_konten = st.session_state.df_konten_active
+
+# =================
+# HEADER FUNCTION
+# =================
 def render_header(title, subtitle):
     st.markdown(f"""
     <div class="header-box">
@@ -303,40 +595,38 @@ def render_header(title, subtitle):
         <div class="header-sub">{subtitle}</div>
     </div>
     """, unsafe_allow_html=True)
-# =========================================
-# SIDEBAR PREMIUM (RESTRUKTURISASI TATA LETAK)
-# =========================================
+# =========
+# SIDEBAR
+# =========
 with st.sidebar:
 
-    # 1. LOGO HORIZONTAL SEJAJAR & BERDEMPETAN BERJARAK
+    # 1. LOGO HORIZONTAL
     col_logo1, col_logo2 = st.columns([1, 1])
     base_dir = os.path.dirname(os.path.abspath(__file__))
     path_logo_kampus = os.path.join(base_dir, "assets", "logo_kampus.png")
     path_logo_radar = os.path.join(base_dir, "assets", "logo_radar.png")
     
     with col_logo1:
-        # Mengatur perataan kanan (right) untuk logo pertama agar berdempetan ke tengah
+        # Mengatur perataan kanan (right) untuk logo
         st.markdown('<div style="text-align: right; padding-right: 10px;">', unsafe_allow_html=True)
         st.image(path_logo_kampus, width=65)
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col_logo2:
-        # Mengatur perataan kiri (left) untuk logo kedua agar berdempetan ke tengah
+        # Mengatur perataan kiri (left) untuk logo
         st.markdown('<div style="text-align: left; padding-left: 10px;">', unsafe_allow_html=True)
         st.image(path_logo_radar, width=75)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 2. KOMPONEN PROFIL MAHASISWA (FOTO BULAT + IDENTITAS)
+    # 2. KOMPONEN PROFIL MAHASISWA (FOTO + IDENTITAS)
     path_foto_profil = os.path.join(base_dir, "assets", "foto_profil.png")
     
-    # Validasi apakah file foto tersedia untuk menghindari kegagalan sistem
     if os.path.exists(path_foto_profil):
         import base64
         with open(path_foto_profil, "rb") as image_file:
             encoded_img = base64.b64encode(image_file.read()).decode()
         img_src = f"data:image/png;base64,{encoded_img}"
     else:
-        # Menggunakan avatar in-memory default jika file foto fisik belum diletakkan
         img_src = "https://www.w3schools.com/howto/img_avatar.png"
 
     st.markdown(f"""
@@ -357,22 +647,134 @@ with st.sidebar:
     def render_nav_button(label, key, emoji_icon):
         is_active = (st.session_state.page == key)
         
-        # Menggabungkan emoji bawaan yang aman dibaca oleh st.button
         button_label = f"{emoji_icon}  {label}"
         
-        # Pemicu pembungkus divisi kelas lewat markdown sebelum tombol dicetak
         if st.button(button_label, key=f"btn_{key}", disabled=is_active):
             st.session_state.page = key
             st.rerun()
 
     # EKSEKUSI MENU NAVIGASI MENGGUNAKAN EMOJI FORMAL JELAS
-    render_nav_button("Dashboard", "dashboard", "🏠︎")
-    render_nav_button("Data Agregat", "agregat", "🗁")
-    render_nav_button("Analisis Konten", "konten", "🗐")
-    render_nav_button("Strategi & Rekomendasi", "strategi", "✈︎")
+    render_nav_button("Dashboard", "dashboard", "⌘")
+    render_nav_button("Data Agregat", "agregat", "◫")
+    render_nav_button("Analisis Konten", "konten", "◈")
+    render_nav_button("Strategi & Rekomendasi", "strategi", "✦")
+
+
+    # ===============================
+    # KELOLA DATASET DI SIDEBAR
+    # ===============================
+    st.markdown("""
+    <hr style="border: 0.5px solid rgba(255,255,255,0.25); margin: 18px 0;">
+    <div style="
+        color:white;
+        font-size:16px;
+        font-weight:700;
+        margin-bottom:10px;
+        text-align:center;
+    ">
+        🗃 Kelola Dataset
+    </div>
+    """, unsafe_allow_html=True)
+
+    with st.expander("Upload / Ganti Dataset", expanded=False):
+
+        st.markdown(
+            '<div class="dataset-label">◫ Data Agregat</div>',
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            '<div class="dataset-note">CSV wajib berisi Date, Video views, Likes, Comments, dan Shares. Engagement dihitung otomatis.</div>',
+            unsafe_allow_html=True
+        )
+
+        uploaded_agregat = st.file_uploader(
+            "Upload CSV Agregat",
+            type=["csv"],
+            key="upload_agregat_sidebar"
+        )
+
+        if uploaded_agregat is not None:
+            file_id_agregat = f"{uploaded_agregat.name}_{uploaded_agregat.size}"
+
+            if st.session_state.get("last_uploaded_agregat") != file_id_agregat:
+                try:
+                    uploaded_df = pd.read_csv(uploaded_agregat)
+                    uploaded_df = prepare_agregat_data(uploaded_df)
+
+                    st.session_state.df_agregat_active = uploaded_df
+                    st.session_state.nama_file_agregat = uploaded_agregat.name
+                    st.session_state.last_uploaded_agregat = file_id_agregat
+
+                    st.success("Data agregat berhasil diganti")
+                    st.rerun()
+
+                except Exception as e:
+                    st.error(f"Upload agregat gagal: {e}")
+
+        st.markdown('<div class="reset-dataset-btn">', unsafe_allow_html=True)
+        if st.button("Reset Agregat Default"):
+            st.session_state.df_agregat_active = df_agregat_default
+            st.session_state.nama_file_agregat = "Dataset default"
+            st.session_state.last_uploaded_agregat = None
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        st.markdown("<hr>", unsafe_allow_html=True)
+
+        st.markdown(
+            '<div class="dataset-label">◈ Data Per Konten</div>',
+            unsafe_allow_html=True
+        )
+
+        st.markdown(
+            '<div class="dataset-note">CSV wajib berisi content_type, upload_date, upload_time, video_views, likes, comments, shares, upload_category dan performance_category.</div>',
+            unsafe_allow_html=True
+        )
+
+        uploaded_konten = st.file_uploader(
+            "Upload CSV Per Konten",
+            type=["csv"],
+            key="upload_konten_sidebar"
+        )
+
+        if uploaded_konten is not None:
+            file_id_konten = f"{uploaded_konten.name}_{uploaded_konten.size}"
+
+            if st.session_state.get("last_uploaded_konten") != file_id_konten:
+                try:
+                    new_df = pd.read_csv(uploaded_konten)
+                    new_df = prepare_konten_data(new_df)
+
+                    st.session_state.df_konten_active = new_df
+                    st.session_state.nama_file_konten = uploaded_konten.name
+                    st.session_state.last_uploaded_konten = file_id_konten
+
+                    st.success("Data per konten berhasil diganti")
+                    st.rerun()
+
+                except Exception as e:
+                    st.error(f"Upload konten gagal: {e}")
+
+        st.markdown('<div class="reset-dataset-btn">', unsafe_allow_html=True)
+        if st.button("Reset Konten Default"):
+            st.session_state.df_konten_active = df_konten_default
+            st.session_state.nama_file_konten = "Dataset default"
+            st.session_state.last_uploaded_konten = None
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        f'<div class="dataset-status">◫ Agregat: {st.session_state.nama_file_agregat}</div>',
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        f'<div class="dataset-status">◈ Konten: {st.session_state.nama_file_konten}</div>',
+        unsafe_allow_html=True
+    )
 
 menu = st.session_state.page
-
 
 # =========================================
 # ================= DASHBOARD =================
@@ -382,50 +784,11 @@ if menu == "dashboard":
         "Dashboard Analisis TikTok Radar Sukabumi",
         "Ringkasan performa konten dan insight utama"
     )
-    
-    st.markdown("### 📤 Upload Data Agregat Baru")
-
-    with st.expander("Upload CSV Data Agregat TikTok Studio", expanded=False):
-        st.info(
-            "Upload file CSV data agregat baru. Minimal harus memiliki kolom Date, Video views, Likes, Comments, dan Shares, sistem akan menghitung engagement secara otomatis."
-        )
-
-        uploaded_agregat = st.file_uploader(
-            "Pilih file CSV data agregat",
-            type=["csv"],
-            key="upload_agregat"
-        )
-
-        col_upload1, col_upload2 = st.columns([1, 1])
-
-        with col_upload1:
-            if uploaded_agregat is not None:
-                try:
-                    uploaded_df = pd.read_csv(uploaded_agregat)
-                    uploaded_df = prepare_agregat_data(uploaded_df)
-
-                    st.session_state.df_agregat_active = uploaded_df
-                    st.session_state.nama_file_agregat = uploaded_agregat.name
-
-                    st.success(f"Data berhasil diunggah: {uploaded_agregat.name}")
-                    st.rerun()
-
-                except Exception as e:
-                    st.error(f"Upload gagal. Periksa format kolom CSV. Detail error: {e}")
-
-        with col_upload2:
-            if st.button("Gunakan Dataset Default"):
-                st.session_state.df_agregat_active = df_agregat_default
-                st.session_state.nama_file_agregat = "Dataset default"
-                st.rerun()
 
     df_agregat = st.session_state.df_agregat_active
+    df_konten = st.session_state.df_konten_active
 
-    st.caption(f"Dataset agregat aktif: {st.session_state.nama_file_agregat}")
     # ================= KPI =================
-
-    # ================= KPI ADAPTIF FINAL =================
-
     col1, col2, col3, col4 = st.columns(4)
 
     col1.markdown(f"""
@@ -460,41 +823,45 @@ if menu == "dashboard":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("#### 📈 Trend Video Views")
+        st.markdown("#### ⌁ Trend Video Views")
         fig = px.line(df_agregat, x="date", y="video_views")
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.markdown("#### 📊 Trend Engagement Rate")
+        st.markdown("#### ◫ Trend Engagement Rate")
         fig2 = px.line(df_agregat, x="date", y="engagement_rate")
         st.plotly_chart(fig2, use_container_width=True)
 
     # ================= ROW 2 =================
     col1, col2 = st.columns(2)
 
-    avg_day = df_agregat.groupby('day_name')['video_views'].mean().reset_index()
+    avg_day = df_agregat.groupby("day_name")["video_views"].mean().reset_index()
 
     with col1:
-        st.markdown("#### 📅 Rata-rata Views per Hari")
+        st.markdown("#### ◨ Rata-rata Views per Hari")
         fig3 = px.bar(avg_day, x="day_name", y="video_views")
         st.plotly_chart(fig3, use_container_width=True)
 
-    avg_month = df_agregat.groupby('month')['video_views'].mean().reset_index()
+    avg_month = df_agregat.groupby("month")["video_views"].mean().reset_index()
 
     with col2:
-        st.markdown("#### 🗓️ Rata-rata Views per Bulan")
+        st.markdown("#### ◧ Rata-rata Views per Bulan")
         fig4 = px.bar(avg_month, x="month", y="video_views")
         st.plotly_chart(fig4, use_container_width=True)
 
     # ================= ROW 3 =================
-    st.markdown("#### 🎯 Performa Konten")
+    st.markdown("#### ◈ Performa Konten")
 
     perf = df_konten.groupby("content_type")[["engagement_rate"]].mean()
 
-    fig5 = px.bar(perf, y=perf.index, x="engagement_rate", orientation='h')
-    st.plotly_chart(fig5, use_container_width=True)
+    fig5 = px.bar(
+        perf,
+        y=perf.index,
+        x="engagement_rate",
+        orientation="h"
+    )
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.plotly_chart(fig5, use_container_width=True)
 
 # =========================================
 # ================= AGREGAT =================
@@ -504,8 +871,7 @@ elif menu == "agregat":
         "Data Agregat 1 Tahun",
         "Analisis tren performa berdasarkan waktu"
     )
-    df_agregat = st.session_state.df_agregat_active
-    st.caption(f"Dataset agregat aktif: {st.session_state.nama_file_agregat}")
+
     # ================= KPI MINI =================
     col1, col2, col3, col4 = st.columns(4)
 
@@ -541,12 +907,12 @@ elif menu == "agregat":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("### 📈 Trend Video Views")
+        st.markdown("### ⌁ Trend Video Views")
         fig1 = px.line(df_agregat, x="date", y="video_views")
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
-        st.markdown("### 📊 Trend Engagement Rate")
+        st.markdown("### ◫ Trend Engagement Rate")
         fig2 = px.line(df_agregat, x="date", y="engagement_rate")
         st.plotly_chart(fig2, use_container_width=True)
 
@@ -556,14 +922,14 @@ elif menu == "agregat":
     avg_day = df_agregat.groupby('day_name')['video_views'].mean().reset_index()
 
     with col1:
-        st.markdown("### 📅 Rata-rata Views per Hari")
+        st.markdown("### ◨ Rata-rata Views per Hari")
         fig3 = px.bar(avg_day, x="day_name", y="video_views")
         st.plotly_chart(fig3, use_container_width=True)
 
     avg_month = df_agregat.groupby('month')['video_views'].mean().reset_index()
 
     with col2:
-        st.markdown("### 🗓️ Rata-rata Views per Bulan")
+        st.markdown("### ◧ Rata-rata Views per Bulan")
         fig4 = px.bar(avg_month, x="month", y="video_views")
         st.plotly_chart(fig4, use_container_width=True)
 
@@ -581,6 +947,8 @@ elif menu == "agregat":
 # ================= KONTEN =================
 # =========================================
 elif menu == "konten":
+    df_konten = st.session_state.df_konten_active
+    df_agregat = st.session_state.df_agregat_active
     render_header(
         "Analisis Per Konten",
         "Evaluasi performa berdasarkan kategori dan jenis konten"
@@ -603,16 +971,40 @@ elif menu == "konten":
     else:
         # ================= KPI =================
         col1, col2, col3 = st.columns(3)
-        col1.metric("Avg Views", f"{df_filtered['video_views'].mean():,.0f}")
-        col2.metric("Avg Engagement", f"{df_filtered['engagement_rate'].mean():.2f}%")
-        col3.metric("Total Konten", len(df_filtered))
+
+        col1.markdown(f"""
+        <div class="kpi-card">
+            <b>Avg Views</b><br>
+            <span style="font-size:22px; font-weight:700;">
+                {df_filtered['video_views'].mean():,.0f}
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        col2.markdown(f"""
+        <div class="kpi-card">
+            <b>Avg Engagement</b><br>
+            <span style="font-size:22px; font-weight:700;">
+                {df_filtered['engagement_rate'].mean():.2f}%
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+
+        col3.markdown(f"""
+        <div class="kpi-card">
+            <b>Total Konten</b><br>
+            <span style="font-size:22px; font-weight:700;">
+                {len(df_filtered)}
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
 
         # ================= HISTOGRAM =================
         fig = px.histogram(df_filtered, x="performance_category", title="Distribusi Performa")
         st.plotly_chart(fig, use_container_width=True)
 
         # ================= BAR CHART (TAMBAHAN) =================
-        st.markdown("### 📊 Performa Rata-rata per Jenis Konten")
+        st.markdown("### ◩ Performa Rata-rata per Jenis Konten")
 
         perf = df_filtered.groupby("content_type")[["engagement_rate"]].mean()
 
@@ -653,7 +1045,8 @@ elif menu == "konten":
 # ================= STRATEGI =================
 # =========================================
 elif menu == "strategi":
-
+    df_konten = st.session_state.df_konten_active
+    df_agregat = st.session_state.df_agregat_active
     render_header(
         "Strategi & Rekomendasi",
         "Insight berbasis data untuk optimasi konten"
@@ -669,7 +1062,6 @@ elif menu == "strategi":
     # ===============================
     # KPI UTAMA
     # ===============================
-    st.markdown("### 📊 Hasil Analisis Performa")
 
     col1, col2, col3 = st.columns(3)
 
@@ -677,14 +1069,37 @@ elif menu == "strategi":
     best_day_eng = df_agregat.groupby('day_name')['engagement_rate'].mean().idxmax()
     best_month = df_agregat.groupby('month')['video_views'].mean().idxmax()
 
-    col1.metric("Hari Views Tertinggi", best_day_views)
-    col2.metric("Hari Engagement Tertinggi", best_day_eng)
-    col3.metric("Bulan Terbaik", best_month)
+    col1.markdown(f"""
+    <div class="kpi-card">
+        <b>Hari Views Tertinggi</b><br>
+        <span style="font-size:26px; font-weight:700;">
+            {best_day_views}
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col2.markdown(f"""
+    <div class="kpi-card">
+        <b>Hari Engagement Tertinggi</b><br>
+        <span style="font-size:26px; font-weight:700;">
+            {best_day_eng}
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col3.markdown(f"""
+    <div class="kpi-card">
+        <b>Bulan Terbaik</b><br>
+        <span style="font-size:26px; font-weight:700;">
+            {best_month}
+        </span>
+    </div>
+    """, unsafe_allow_html=True)
 
     # ===============================
     # TABEL ANALISIS
     # ===============================
-    st.markdown("### 📅 Analisis Hari Terbaik")
+    st.markdown("### ◩ Analisis Hari Terbaik")
     day_perf = df_agregat.groupby('day_name').agg({
         'video_views': 'mean',
         'engagement_rate': 'mean'
@@ -692,7 +1107,7 @@ elif menu == "strategi":
 
     st.dataframe(day_perf)
 
-    st.markdown("### 🗓️ Analisis Bulan Terbaik")
+    st.markdown("### ◫ Analisis Bulan Terbaik")
     month_perf = df_agregat.groupby('month').agg({
         'video_views': 'mean',
         'engagement_rate': 'mean'
@@ -703,7 +1118,7 @@ elif menu == "strategi":
     # ===============================
     # ANALISIS KONTEN
     # ===============================
-    st.markdown("### 🎯 Analisis Berdasarkan Konten")
+    st.markdown("### ◈ Analisis Berdasarkan Konten")
 
     content_perf = df_konten.groupby('content_type').agg({
         'video_views': 'mean',
@@ -717,7 +1132,7 @@ elif menu == "strategi":
     # WAKTU UPLOAD
     # ===============================
     if 'upload_category' in df_konten.columns:
-        st.markdown("### ⏰ Analisis Waktu Upload")
+        st.markdown("### ◷ Analisis Waktu Upload")
 
         time_perf = df_konten.groupby('upload_category').agg({
             'video_views': 'mean',
@@ -735,7 +1150,7 @@ elif menu == "strategi":
         # ===============================
     # STRATEGI OTOMATIS
     # ===============================
-    st.markdown("### 🧠 Insight Otomatis & Strategi")
+    st.markdown("### ✦ Insight & Strategi")
 
     avg_views = df_agregat['video_views'].mean()
     avg_eng = df_agregat['engagement_rate'].mean()
@@ -753,11 +1168,10 @@ elif menu == "strategi":
     </div>
     """, unsafe_allow_html=True)
 
-
     # ===============================
     # REKOMENDASI
     # ===============================
-    st.markdown("### 📌 Rekomendasi Strategi")
+    st.markdown("### ✧ Rekomendasi Strategi")
 
     if 'upload_category' in df_konten.columns:
         best_time_views = df_konten.groupby('upload_category')['video_views'].mean().idxmax()
